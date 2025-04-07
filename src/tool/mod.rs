@@ -1,7 +1,7 @@
-pub mod websearch;
-
+pub mod closure;
 #[cfg(feature = "mcp-client")]
 pub mod mcp;
+pub mod websearch;
 
 use async_trait::async_trait;
 use serde_json::Value;
