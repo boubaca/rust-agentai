@@ -1,12 +1,9 @@
 use agentai::Agent;
 use anyhow::Result;
-use genai::Client;
 use log::{info, LevelFilter};
 use schemars::JsonSchema;
 use serde::Deserialize;
 use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
-
-const MODEL: &str = "gpt-4o-mini";
 
 const SYSTEM: &str = "You are helpful assistant";
 
@@ -20,16 +17,15 @@ async fn main() -> Result<()> {
     )?;
     info!("Starting AgentAI");
 
-    // Creating GenAI client
-    let client = Client::default();
+    let model = std::env::var("AGENTAI_MODEL").unwrap_or("gemini-2.0-flash".to_string());
 
     let question = "Why sky is blue?";
 
     info!("Question: {}", question);
 
-    let mut agent = Agent::new(&client, SYSTEM, &());
+    let mut agent = Agent::new(SYSTEM, &());
 
-    let answer: Answer = agent.run(MODEL, question).await?;
+    let answer: Answer = agent.run(&model, question).await?;
 
     info!("{:#?}", answer);
 

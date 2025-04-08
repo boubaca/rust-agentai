@@ -16,9 +16,10 @@ use std::sync::Arc;
 /// As `Context` you can provide any structure. Such object will not be used by
 /// `Agent` itself, but it will be passed in unmodified state as reference to any
 /// `AgentTool` trait, that was registered to be used.
+#[derive(Clone)]
 pub struct Agent<'a, CTX> {
     /// Reference to GenAI Client
-    client: &'a Client,
+    client: Client,
     /// Dynamic Context
     context: &'a CTX,
     /// Objects of tools implementations
@@ -39,7 +40,9 @@ impl<'a, CTX> Agent<'a, CTX> {
     /// # Returns
     ///
     /// A new `Agent` instance.
-    pub fn new(client: &'a Client, system: &str, context: &'a CTX) -> Self {
+    pub fn new(system: &str, context: &'a CTX) -> Self {
+        let client = Client::default();
+
         Self {
             client,
             context,
